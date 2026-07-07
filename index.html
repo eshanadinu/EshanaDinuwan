@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eshana Dinuwan — Profile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+  :root{
+    --bg-0:#0a0a0b;
+    --bg-1:#121214;
+    --surface:#17171a;
+    --surface-2:#1e1e22;
+    --line:#2a2a2e;
+    --red:#e01b2e;
+    --red-glow:#ff2d43;
+    --white:#f3f2ee;
+    --muted:#8b8b92;
+    --radius:22px;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:var(--bg-0);
+    color:var(--white);
+    font-family:'Inter',sans-serif;
+    min-height:100vh;
+    overflow-x:hidden;
+    position:relative;
+  }
+
+  /* ---------- Background ---------- */
+  .bg-layer{
+    position:fixed;
+    inset:0;
+    z-index:0;
+    overflow:hidden;
+    background:
+      radial-gradient(circle at 18% 20%, rgba(224,27,46,0.16), transparent 45%),
+      radial-gradient(circle at 85% 75%, rgba(224,27,46,0.10), transparent 50%),
+      linear-gradient(180deg, #08080a 0%, #0c0c0e 100%);
+  }
+
+  .bg-grid{
+    position:absolute;
+    inset:0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size:42px 42px;
+    mask-image:radial-gradient(circle at 50% 30%, black, transparent 75%);
+  }
+
+  .brush{
+    position:absolute;
+    border-radius:50%;
+    filter:blur(70px);
+    opacity:0.35;
+    background:var(--red);
+    animation:drift 18s ease-in-out infinite;
+  }
+  .brush.b1{ width:380px; height:380px; top:-120px; left:-100px; animation-delay:0s;}
+  .brush.b2{ width:300px; height:300px; bottom:-100px; right:-80px; background:#7a0f1c; animation-delay:4s;}
+  .brush.b3{ width:220px; height:220px; top:55%; left:60%; background:#ff3b4e; opacity:0.15; animation-delay:8s;}
+
+  @keyframes drift{
+    0%,100%{ transform:translate(0,0) scale(1); }
+    50%{ transform:translate(30px,-25px) scale(1.08); }
+  }
+
+  .scan-line{
+    position:absolute;
+    left:0; right:0;
+    height:1px;
+    background:linear-gradient(90deg, transparent, rgba(224,27,46,0.6), transparent);
+    animation:scan 12s linear infinite;
+    opacity:0.5;
+  }
+
+  @keyframes scan{
+    0%{ top:-5%; }
+    100%{ top:105%; }
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    .brush,.scan-line,*{animation:none !important; transition:none !important;}
+  }
+
+  /* ---------- Layout ---------- */
+  .wrap{
+    position:relative;
+    z-index:1;
+    max-width:480px;
+    margin:0 auto;
+    padding:56px 22px 60px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+  }
+
+  /* Crown mark */
+  .mark{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    color:var(--red);
+    font-size:12px;
+    letter-spacing:0.28em;
+    text-transform:uppercase;
+    margin-bottom:28px;
+    opacity:0;
+    animation:fadeUp 0.8s ease forwards 0.1s;
+  }
+  .mark i{ font-size:14px; animation:pulse 2.4s ease-in-out infinite;}
+  @keyframes pulse{
+    0%,100%{ filter:drop-shadow(0 0 0 rgba(255,45,67,0)); transform:scale(1);}
+    50%{ filter:drop-shadow(0 0 6px rgba(255,45,67,0.7)); transform:scale(1.1);}
+  }
+
+  /* Photo */
+  .photo-ring{
+    position:relative;
+    width:196px;
+    height:196px;
+    border-radius:50%;
+    padding:5px;
+    background:conic-gradient(from 0deg, var(--red), #4a0812, var(--red));
+    opacity:0;
+    animation:fadeUp 0.9s ease forwards 0.25s;
+    margin-bottom:26px;
+  }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  .photo-inner{
+    width:100%; height:100%;
+    border-radius:50%;
+    overflow:hidden;
+    background:var(--bg-1);
+    border:4px solid var(--bg-0);
+    /*animation:counterspin 9s linear infinite;*/
+  }
+  @keyframes counterspin{ to{ transform:rotate(-360deg); } }
+  .photo-inner img{
+    width:100%; height:100%;
+    object-fit:cover;
+    object-position:center 22%;
+    display:block;
+  }
+
+  .status-dot{
+    position:absolute;
+    bottom:8px; right:10px;
+    width:18px; height:18px;
+    background:#28d179;
+    border:3px solid var(--bg-0);
+    border-radius:50%;
+    box-shadow:0 0 0 0 rgba(40,209,121,0.6);
+    animation:ping 2s ease-out infinite;
+  }
+  @keyframes ping{
+    0%{ box-shadow:0 0 0 0 rgba(40,209,121,0.5);}
+    70%{ box-shadow:0 0 0 10px rgba(40,209,121,0);}
+    100%{ box-shadow:0 0 0 0 rgba(40,209,121,0);}
+  }
+
+  /* Name */
+  .name{
+    font-family:'Bebas Neue', sans-serif;
+    font-size:52px;
+    letter-spacing:0.03em;
+    line-height:1;
+    text-align:center;
+    opacity:0;
+    animation:fadeUp 0.9s ease forwards 0.4s;
+  }
+  .handle{
+    color:var(--muted);
+    font-size:14px;
+    letter-spacing:0.05em;
+    margin-top:6px;
+    margin-bottom:16px;
+    opacity:0;
+    animation:fadeUp 0.9s ease forwards 0.5s;
+  }
+
+  .tagline{
+    text-align:center;
+    font-size:15px;
+    color:#c9c9cf;
+    max-width:300px;
+    line-height:1.5;
+    margin-bottom:28px;
+    opacity:0;
+    animation:fadeUp 0.9s ease forwards 0.6s;
+  }
+  .tagline .accent{ color:var(--red); font-weight:700; }
+
+  /* Info card */
+  .card{
+    width:100%;
+    background:linear-gradient(180deg, var(--surface), var(--surface-2));
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:20px;
+    margin-bottom:16px;
+    opacity:0;
+    animation:fadeUp 0.9s ease forwards;
+  }
+  .card:nth-of-type(1){ animation-delay:0.7s; }
+
+  .info-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:12px 4px;
+  }
+  .info-row + .info-row{ border-top:1px solid var(--line); }
+  .info-label{
+    display:flex; align-items:center; gap:10px;
+    color:var(--muted);
+    font-size:13px;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+  }
+  .info-label i{ font-size:14px; width:16px; text-align:center; color:var(--red); flex-shrink:0; }
+  .info-value{
+    font-size:14.5px;
+    font-weight:600;
+    color:var(--white);
+    text-align:right;
+  }
+  .info-value.mono{ font-variant-numeric:tabular-nums; letter-spacing:0.02em; }
+
+  .countdown-wrap{
+    display:flex;
+    gap:8px;
+    margin-top:2px;
+  }
+  .cd-box{
+    background:var(--bg-0);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:8px 10px;
+    text-align:center;
+    min-width:52px;
+  }
+  .cd-num{
+    font-family:'Bebas Neue', sans-serif;
+    font-size:20px;
+    color:var(--red-glow);
+    line-height:1;
+  }
+  .cd-label{
+    font-size:9px;
+    color:var(--muted);
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    margin-top:2px;
+  }
+
+  /* Contact buttons */
+  .links{
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+
+  .link-btn{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    width:100%;
+    padding:15px 16px;
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:16px;
+    color:var(--white);
+    text-decoration:none;
+    font-size:14.5px;
+    font-weight:600;
+    position:relative;
+    overflow:hidden;
+    transition:transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+    opacity:0;
+    animation:fadeUp 0.7s ease forwards;
+    cursor:pointer;
+  }
+  .link-btn::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(90deg, transparent, rgba(224,27,46,0.12), transparent);
+    transform:translateX(-100%);
+    transition:transform 0.6s ease;
+  }
+  .link-btn:hover::before{ transform:translateX(100%); }
+  .link-btn:hover{
+    transform:translateY(-2px);
+    border-color:rgba(224,27,46,0.5);
+    background:var(--surface-2);
+  }
+  .link-btn:active{ transform:translateY(0) scale(0.98); }
+
+  .link-icon{
+    width:38px; height:38px;
+    flex-shrink:0;
+    border-radius:10px;
+    background:var(--bg-0);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--red);
+  }
+  .link-icon i{ font-size:17px; }
+  .link-text{ display:flex; flex-direction:column; gap:1px; flex:1; min-width:0;}
+  .link-title{ color:var(--white); }
+  .link-sub{ color:var(--muted); font-size:12px; font-weight:400; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .link-arrow{ color:var(--muted); font-size:14px; flex-shrink:0; transition:transform 0.25s ease, color 0.25s ease;}
+  .link-btn:hover .link-arrow{ transform:translateX(3px); color:var(--red); }
+
+  footer{
+    margin-top:34px;
+    text-align:center;
+    color:var(--muted);
+    font-size:11.5px;
+    letter-spacing:0.06em;
+    opacity:0;
+    animation:fadeUp 0.9s ease forwards 1.3s;
+  }
+  footer span{ color:var(--red); }
+
+  @keyframes fadeUp{
+    from{ opacity:0; transform:translateY(14px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+
+  :focus-visible{
+    outline:2px solid var(--red);
+    outline-offset:2px;
+  }
+
+  @media (max-width:420px){
+    .name{ font-size:44px; }
+    .photo-ring{ width:168px; height:168px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-layer">
+  <div class="bg-grid"></div>
+  <div class="brush b1"></div>
+  <div class="brush b2"></div>
+  <div class="brush b3"></div>
+  <div class="scan-line"></div>
+</div>
+
+<div class="wrap">
+
+  <div class="mark">
+    <i class="fa-solid fa-crown"></i>
+    Personal Profile
+  </div>
+
+  <div class="photo-ring">
+    <div class="photo-inner">
+      <img src="profile-img.png" alt="Eshana Dinuwan">
+    </div>
+    <div class="status-dot" title="Available"></div>
+  </div>
+
+  <h1 class="name">ESHANA DINUWAN</h1>
+  <div class="handle">@itz_eezy2007</div>
+
+  <p class="tagline">"Stay Real, <span class="accent">Stay You</span>" — Focus. Believe. Achieve.</p>
+
+  <div class="card">
+    <div class="info-row">
+      <div class="info-label">
+        <i class="fa-solid fa-cake-candles"></i>
+        Age
+      </div>
+      <div class="info-value" id="age-value">—</div>
+    </div>
+    <div class="info-row">
+      <div class="info-label">
+        <i class="fa-solid fa-hourglass-half"></i>
+        Next Birthday
+      </div>
+      <div class="countdown-wrap" id="countdown"></div>
+    </div>
+    <div class="info-row">
+      <div class="info-label">
+        <i class="fa-solid fa-circle-check"></i>
+        Status
+      </div>
+      <div class="info-value">Active</div>
+    </div>
+  </div>
+
+  <div class="links">
+    <a class="link-btn" href="https://wa.me/94771234567" target="_blank" rel="noopener" style="animation-delay:0.8s">
+      <div class="link-icon">
+        <i class="fa-brands fa-whatsapp"></i>
+      </div>
+      <div class="link-text">
+        <div class="link-title">WhatsApp</div>
+        <div class="link-sub">@eshana.dinuwan</div>
+      </div>
+      <i class="fa-solid fa-arrow-right link-arrow"></i>
+    </a>
+
+    <a class="link-btn" href="mailto:dinuwan516@gmail.com" style="animation-delay:0.88s">
+      <div class="link-icon">
+        <i class="fa-solid fa-envelope"></i>
+      </div>
+      <div class="link-text">
+        <div class="link-title">Email</div>
+        <div class="link-sub">dinuwan516@gmail.com</div>
+      </div>
+      <i class="fa-solid fa-arrow-right link-arrow"></i>
+    </a>
+
+    <a class="link-btn" href="https://www.instagram.com/itz_eezy2007/" target="_blank" rel="noopener" style="animation-delay:0.96s">
+      <div class="link-icon">
+        <i class="fa-brands fa-instagram"></i>
+      </div>
+      <div class="link-text">
+        <div class="link-title">Instagram</div>
+        <div class="link-sub">@itz_eezy2007</div>
+      </div>
+      <i class="fa-solid fa-arrow-right link-arrow"></i>
+    </a>
+
+    <a class="link-btn" href="https://web.facebook.com/Eshana.Dinuwan/" target="_blank" rel="noopener" style="animation-delay:1.04s">
+      <div class="link-icon">
+        <i class="fa-brands fa-facebook-f"></i>
+      </div>
+      <div class="link-text">
+        <div class="link-title">Facebook</div>
+        <div class="link-sub">Eshana.Dinuwan</div>
+      </div>
+      <i class="fa-solid fa-arrow-right link-arrow"></i>
+    </a>
+  </div>
+
+  <footer>Maintained by <span>Eshana Dinuwan</span> — Est. 2007</footer>
+</div>
+
+<script>
+  // ---- Age & birthday countdown ----
+  const birthDate = new Date(2007, 10, 15); // month index 10 = November
+
+  function updateAgeAndCountdown(){
+    const now = new Date();
+    let age = now.getFullYear() - birthDate.getFullYear();
+    const hasHadBirthdayThisYear =
+      (now.getMonth() > birthDate.getMonth()) ||
+      (now.getMonth() === birthDate.getMonth() && now.getDate() >= birthDate.getDate());
+    if(!hasHadBirthdayThisYear) age -= 1;
+    document.getElementById('age-value').textContent = age + ' yrs';
+
+    let nextBday = new Date(now.getFullYear(), birthDate.getMonth(), birthDate.getDate());
+    if(nextBday < now){ nextBday.setFullYear(nextBday.getFullYear() + 1); }
+    const diff = nextBday - now;
+    const days = Math.floor(diff / (1000*60*60*24));
+    const hours = Math.floor((diff / (1000*60*60)) % 24);
+    const mins = Math.floor((diff / (1000*60)) % 60);
+
+    const cd = document.getElementById('countdown');
+    cd.innerHTML = `
+      <div class="cd-box"><div class="cd-num">${days}</div><div class="cd-label">Days</div></div>
+      <div class="cd-box"><div class="cd-num">${hours}</div><div class="cd-label">Hrs</div></div>
+      <div class="cd-box"><div class="cd-num">${mins}</div><div class="cd-label">Min</div></div>
+    `;
+  }
+  updateAgeAndCountdown();
+  setInterval(updateAgeAndCountdown, 60000);
+</script>
+
+</body>
+</html>
