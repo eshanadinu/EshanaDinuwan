@@ -346,6 +346,128 @@
     .name{ font-size:44px; }
     .photo-ring{ width:168px; height:168px; }
   }
+
+  /* ---------- NFC Card Modal ---------- */
+  .nfc-overlay{
+    position:fixed;
+    inset:0;
+    z-index:50;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:rgba(6,6,8,0.55);
+    backdrop-filter:blur(14px) saturate(120%);
+    -webkit-backdrop-filter:blur(14px) saturate(120%);
+    opacity:0;
+    visibility:hidden;
+    transition:opacity 0.35s ease, visibility 0.35s ease;
+    padding:24px;
+  }
+  .nfc-overlay.open{
+    opacity:1;
+    visibility:visible;
+  }
+
+  .nfc-hint{
+    position:absolute;
+    bottom:36px;
+    left:50%;
+    transform:translateX(-50%);
+    color:var(--muted);
+    font-size:12.5px;
+    letter-spacing:0.04em;
+    text-align:center;
+    opacity:0;
+    transition:opacity 0.35s ease 0.2s;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .nfc-overlay.open .nfc-hint{ opacity:1; }
+  .nfc-hint i{ color:var(--red); }
+
+  .nfc-close{
+    position:absolute;
+    top:22px;
+    right:22px;
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    background:var(--surface);
+    border:1px solid var(--line);
+    color:var(--white);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:16px;
+    cursor:pointer;
+    transition:background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+  }
+  .nfc-close:hover{
+    background:var(--surface-2);
+    border-color:rgba(224,27,46,0.5);
+    transform:rotate(90deg);
+  }
+
+  .nfc-card-3d{
+    width:min(88vw, 380px);
+    aspect-ratio:1013 / 638;
+    perspective:1600px;
+    cursor:pointer;
+    transform:scale(0.85);
+    transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  .nfc-overlay.open .nfc-card-3d{
+    transform:scale(1);
+  }
+  .nfc-overlay.closing .nfc-card-3d{
+    transform:scale(0.7);
+  }
+
+.nfc-card-inner{
+    position:relative;
+    width:100%;
+    height:100%;
+    transform-style:preserve-3d;
+    transition:transform .7s;
+}
+
+.nfc-card-inner.flipped{
+    transform:rotateY(180deg);
+}
+
+.nfc-card-face{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
+
+    overflow:hidden;
+    border-radius:18px;
+}
+
+.nfc-card-face.front{
+    transform:rotateY(0deg);
+}
+
+.nfc-card-face.back{
+    transform:rotateY(180deg);
+}
+  .nfc-card-face img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+    pointer-events:none;
+    -webkit-user-drag:none;
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    .nfc-card-inner{ transition:none; }
+  }
 </style>
 </head>
 <body>
@@ -408,18 +530,18 @@
       </div>
       <div class="link-text">
         <div class="link-title">WhatsApp</div>
-        <div class="link-sub">@example</div>
+        <div class="link-sub">@eshana.dinuwan</div>
       </div>
       <i class="fa-solid fa-arrow-right link-arrow"></i>
     </a>
 
-    <a class="link-btn" href="mailto:example@gmail.com" style="animation-delay:0.88s">
+    <a class="link-btn" href="mailto:dinuwan516@gmail.com" style="animation-delay:0.88s">
       <div class="link-icon">
         <i class="fa-solid fa-envelope"></i>
       </div>
       <div class="link-text">
         <div class="link-title">Email</div>
-        <div class="link-sub">example@gmail.com</div>
+        <div class="link-sub">dinuwan516@gmail.com</div>
       </div>
       <i class="fa-solid fa-arrow-right link-arrow"></i>
     </a>
@@ -445,9 +567,41 @@
       </div>
       <i class="fa-solid fa-arrow-right link-arrow"></i>
     </a>
+
+    <button type="button" class="link-btn" id="nfc-trigger" style="animation-delay:1.12s">
+      <div class="link-icon">
+        <i class="fa-solid fa-id-card"></i>
+      </div>
+      <div class="link-text">
+        <div class="link-title">See My NFC Card</div>
+        <div class="link-sub">Tap to view front &amp; back</div>
+      </div>
+      <i class="fa-solid fa-arrow-right link-arrow"></i>
+    </button>
   </div>
 
   <footer>Maintained by <span>Eshana Dinuwan</span> — Est. 2007</footer>
+</div>
+
+<!-- NFC Card Popup -->
+<div class="nfc-overlay" id="nfc-overlay">
+  <div class="nfc-close" id="nfc-close" title="Close" aria-label="Close">
+    <i class="fa-solid fa-xmark"></i>
+  </div>
+  <div class="nfc-card-3d" id="nfc-card">
+    <div class="nfc-card-inner" id="nfc-card-inner">
+      <div class="nfc-card-face front">
+        <img src="Front.png">
+      </div>
+      <div class="nfc-card-face back">
+        <img src="Back.png">        
+      </div>
+    </div>
+  </div>
+  <div class="nfc-hint" id="nfc-hint">
+    <i class="fa-solid fa-hand-pointer"></i>
+    <span id="nfc-hint-text">Tap the card to flip</span>
+  </div>
 </div>
 
 <script>
@@ -479,6 +633,64 @@
   }
   updateAgeAndCountdown();
   setInterval(updateAgeAndCountdown, 200);
+
+  // ---- NFC Card Popup ----
+  (function(){
+    const trigger   = document.getElementById('nfc-trigger');
+    const overlay   = document.getElementById('nfc-overlay');
+    const closeBtn  = document.getElementById('nfc-close');
+    const card      = document.getElementById('nfc-card');
+    const cardInner = document.getElementById('nfc-card-inner');
+    const hintText  = document.getElementById('nfc-hint-text');
+
+    cardInner.classList.toggle('flipped');
+    let isOpen = false;
+
+    function openModal(){
+      isOpen = true;
+      isFlipped = false;
+      cardInner.classList.remove('flipped');
+      hintText.textContent = 'Tap the card to flip';
+      overlay.classList.remove('closing');
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal(){
+      if(!isOpen) return;
+      isOpen = false;
+      overlay.classList.add('closing');
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+      setTimeout(() => overlay.classList.remove('closing'), 400);
+    }
+
+   function handleCardClick(e){
+    e.stopPropagation();
+
+    isFlipped = !isFlipped;
+
+    cardInner.classList.toggle('flipped', isFlipped);
+
+    hintText.textContent = isFlipped
+        ? 'Tap the card to see the front'
+        : 'Tap the card to flip';
+}
+
+    trigger.addEventListener('click', openModal);
+    closeBtn.addEventListener('click', closeModal);
+    card.addEventListener('click', handleCardClick);
+
+    // Clicking the blurred backdrop also closes it
+    overlay.addEventListener('click', (e) => {
+      if(e.target === overlay){ closeModal(); }
+    });
+
+    // Escape key closes it
+    document.addEventListener('keydown', (e) => {
+      if(e.key === 'Escape' && isOpen){ closeModal(); }
+    });
+  })();
 </script>
 
 </body>
