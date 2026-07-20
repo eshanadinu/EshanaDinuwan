@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Eshana Dinuwan (@itz_eezy2007) — Personal Profile</title>
+<title>Eshana Dinuwan | Personal Profile</title>
 <meta name="description" content="Eshana Dinuwan's personal profile — get in touch via WhatsApp, email, Instagram, or Facebook, and view my digital NFC card.">
 <meta name="keywords" content="Eshana Dinuwan, itz_eezy2007, personal profile, NFC card, Sri Lanka">
 <meta name="author" content="Eshana Dinuwan">
