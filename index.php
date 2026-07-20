@@ -10,21 +10,6 @@
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://eshanadinuwan.pages.dev/">
 
-<!-- Open Graph -->
-<meta property="og:type" content="profile">
-<meta property="og:title" content="Eshana Dinuwan (@itz_eezy2007)">
-<meta property="og:description" content="Stay Real, Stay You — Focus. Believe. Achieve. Connect with me on WhatsApp, Instagram, Facebook, or view my digital NFC card.">
-<meta property="og:image" content="https://eshanadinuwan.pages.dev/profile-img.png">
-<meta property="og:url" content="https://eshanadinuwan.pages.dev/">
-<meta property="og:site_name" content="Eshana Dinuwan">
-<meta property="og:locale" content="en_LK">
-
-<!-- Twitter Card -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Eshana Dinuwan (@itz_eezy2007)">
-<meta name="twitter:description" content="Stay Real, Stay You — Focus. Believe. Achieve.">
-<meta name="twitter:image" content="https://eshanadinuwan.pages.dev/profile-img.png">
-
 <!-- Favicon -->
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230a0a0b'/%3E%3Ctext x='32' y='42' font-family='Arial,Helvetica,sans-serif' font-weight='800' font-size='26' fill='%23e01b2e' text-anchor='middle'%3EED%3C/text%3E%3C/svg%3E">
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230a0a0b'/%3E%3Ctext x='32' y='42' font-family='Arial,Helvetica,sans-serif' font-weight='800' font-size='26' fill='%23e01b2e' text-anchor='middle'%3EED%3C/text%3E%3C/svg%3E">
